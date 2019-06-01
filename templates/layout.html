@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{% if title %}
+	<title>My Amazon-{{ title }}</title>
+	{% else %}
+	<title>My Amazon</title>
+	{% endif %}
+	
+</head>
+<body>
+<h1><b> <center> Welcome to My Amazon</center> </b> </h1>
+
+<br>
+{% block body %}
+
+{% endblock body %}
+</body>
+<footer>
+	<p> &copy; My Amazon 2019</p>
+	<a href="/contact">contact</a><br>
+	<a href="/about">about</a><br>
+	 <a href="/">home</a><br>
+	 {% if session %}
+	 <a href="/logout">logout</a>
+	 {% endif %}	
+</footer>
+</html>
