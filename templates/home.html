@@ -1,4 +1,4 @@
-{% extends 'layout.html' %}
+  {% extends 'layout.html' %}
 
 {% block body %}
 
@@ -9,8 +9,34 @@
 <p> welcome {{ session['username'] }}</p>
 
 <p>you have logged in as {{ session['type'] }}</p>
+<center>
+{% if session['type']=='seller' %}
+<h3>Enter details of the product you want to add</h3>
+
+<form action="/products" method="POST">
+  <input type="text" name="name" placeholder="enter product name here"><br><br>
+  <input type="text" name="price" placeholder="enter price here"><br><br>
+  <p>Enter details below</p>
+  <textarea rows="5" name = "description">          
+  </textarea><br>
+  <input type="submit" value="submit">
+</form>
+</center>
+{%  else%}
+<p><a href="/products"> click here</a> to go the products page</p>
+{% endif %}
 
 {% else %}
+<p>Already have an account? Log In!</p>
+<form action="/login" method="POST">
+  Username:<br>
+  <input type="text" name="username" placeholder="username...">
+  <br>
+  Password:<br>
+  <input type="password" name="password" placeholder="password..."><br><br>
+  <input type="submit" value="submit">
+</form>
+
 <p>Create an account!</p>
 <form action="/signup" method="POST">
   Username:<br>
@@ -25,15 +51,6 @@
   <br><br>
   <input type="submit" value="submit">
 </form> 
-
-<p>Already have an account? Log In!</p>
-<form action="/login" method="POST">
-  Username:<br>
-  <input type="text" name="username" placeholder="username...">
-  <br>
-  Password:<br>
-  <input type="password" name="password" placeholder="password..."><br><br>
-  <input type="submit" value="submit">
-</form> 
+ 
 {% endif %}
 {% endblock body %}

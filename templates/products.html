@@ -1,0 +1,14 @@
+ {% extends 'layout.html' %}
+
+{% block body %}
+
+{% for product in products %}
+	<ul>
+		<li><b>product name</b>  : {{ product['product_name'] }}</li>
+		<li><b>product price</b> : {{ product['price'] }}</li>
+		<li><b>Description</b>   : {{ product['description'] }}</li>
+		<li><b>seller</b>        : {{ product['seller'] }}</li>
+	</ul>
+{% endfor %}
+
+{% endblock body %}

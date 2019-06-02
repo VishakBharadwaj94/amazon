@@ -1,5 +1,5 @@
 from flask import Flask,render_template,request,url_for,redirect,session
-from models.model import user_exists,save_user
+from models.model import user_exists,save_user,product_exists,add_product,products_list
 
 app = Flask(__name__)
 app.secret_key = 'hello'
@@ -50,15 +50,33 @@ def login():
 		username = request.form['username']
 		password = request.form['password']
 		
-
-		if user['username'] == username:
-			if user['password'] == password:
-				session['username']=user['username']
-				session['type']=c_type
+		if user_exists(username):
+			if user_exists(username)['password']==password:
+				session['username']=username
+				session['type']= user_exists(username)['c_type']
 				return redirect(url_for('home'))
 			return "password doesn't match"
-		return "username doesn't match"
-	return redirect(url_for('home'))	
+		return "username doesn't exist.Sign up first!"		
+
+	return redirect(url_for('home'))
+
+@app.route('/products',methods=['GET','POST'])
+def products():
+	if request.method == 'POST':
+		product_info = {}
+		product_info['product_name'] = request.form['name']
+		product_info['price'] = int(request.form['price'])
+		product_info['description']=request.form['description']
+		product_info['seller'] = session['username']
+
+		if product_exists(product_info['product_name']):
+			return "product already exists"
+		add_product(product_info)
+
+		return redirect(url_for('home'))
+	else:
+		products = products_list()
+		return render_template('products.html',products=products)
 
 @app.route('/logout')
 def logout():
