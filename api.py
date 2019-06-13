@@ -1,5 +1,5 @@
-from flask import Flask,render_template,request,url_for,redirect,session
-from models.model import user_exists,save_user,product_exists,add_product,products_list
+from flask import Flask,render_template,request,url_for,redirect,session,jsonify
+from models.model import user_exists,save_user,product_exists,add_product,products_list,add_to_cart,cart_items,remove_from_cart,remove_product
 
 app = Flask(__name__)
 app.secret_key = 'hello'
@@ -14,8 +14,8 @@ def about():
 
 @app.route('/contact')
 def contact():
-
-    return render_template('contact.html')
+	
+	return render_template('contact.html')
 
 @app.route('/signup',methods=['POST','GET'])
 def signup():
@@ -73,10 +73,33 @@ def products():
 			return "product already exists"
 		add_product(product_info)
 
-		return redirect(url_for('home'))
+		return redirect(url_for('products'))
 	else:
 		products = products_list()
 		return render_template('products.html',products=products)
+
+@app.route('/remove_product',methods=['POST'])
+def remove_prod():
+	product = request.form['name']
+	remove_product(product)
+	return redirect(url_for('products'))
+
+@app.route('/cart',methods=['GET','POST'])
+def cart():
+	if request.method == 'POST':
+		
+		product_id = request.form['id']
+		add_to_cart(product_id)
+		return redirect(url_for('cart'))
+
+	cart_list,total = cart_items(session['username'])	
+	return render_template('cart.html',cart=cart_list,total=total)
+
+@app.route('/remove_cart',methods=['POST'])
+def remove_cart():
+		product_name = request.form['product_name']
+		remove_from_cart(product_name)
+		return redirect(url_for('cart'))
 
 @app.route('/logout')
 def logout():

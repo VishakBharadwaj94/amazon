@@ -9,6 +9,17 @@
 		<li><b>Description</b>   : {{ product['description'] }}</li>
 		<li><b>seller</b>        : {{ product['seller'] }}</li>
 	</ul>
+	{% if session['type']=='buyer' %}
+	<form action="/cart" method="POST" >
+		<input type="hidden" name="id" value="{{product['_id']}}">
+		<input type="submit" value="Add to Cart">
+	</form>
+	{% else %}
+	<form action="/remove_product" method="POST" >
+		<input type="hidden" name="name" value="{{product['product_name']}}">
+		<input type="submit" value="Remove product">
+	</form>
+	{% endif %}
 {% endfor %}
 
 {% endblock body %}
